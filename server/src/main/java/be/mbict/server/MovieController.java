@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 @RestController
 public class MovieController {
 
@@ -15,7 +13,7 @@ public class MovieController {
     private static long originalFailures = 0L;
 
     @GetMapping("/movies")
-    public List<Movie> allMovies(@RequestParam(value = "failures", defaultValue = "0", required = false) long failures) throws InterruptedException {
+    public List<Movie> allMovies(@RequestParam(value = "failures", defaultValue = "0", required = false) long failures) {
         if (originalFailures != failures) {
             originalFailures = failures;
             failuresLeft = failures;
@@ -24,6 +22,7 @@ public class MovieController {
             failuresLeft--;
             throw new RuntimeException("Failed to get all movies");
         }
+        originalFailures = 0L;
         return List.of(
                         new Movie("Steven Spielberg", "Indiana Jones and the Raiders of the Lost Ark"),
                         new Movie("George Lucas", "Star Wars: Episode IV - A New Hope"));
