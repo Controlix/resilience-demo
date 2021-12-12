@@ -1,0 +1,23 @@
+server:
+  port: 8090
+
+spring:
+  cloud:
+    discovery.client.simple.instances:
+      books:
+        - uri: http://localhost:8091/timelimit
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+resilience4j.timelimiter:
+  instances:
+    books:
+      timeoutDuration: 2s
+      cancelRunningFuture: true
